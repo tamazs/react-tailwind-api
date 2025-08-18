@@ -1,16 +1,24 @@
-import { useState } from 'react'
-import toast from "react-hot-toast";
+import {createBrowserRouter, RouterProvider} from "react-router";
+import BooksList from "./BooksList.tsx";
+import Layout from "./layout/Layout.tsx";
+import BookDetail from "./BookDetail.tsx";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-        <button className="btn btn-primary" onClick={() => {
-            toast.success('Hello World!')
-        }}>My button</button>
-    </>
-  )
+    return (
+        <RouterProvider router={createBrowserRouter([
+            {path: '/',
+                element: <Layout />,
+            children: [{
+                index: true,
+                element: <BooksList />
+            },
+                {
+                    path: '/books/:bookId',
+                    element: <BookDetail />
+                }
+            ]}
+        ])} />
+    )
 }
 
 export default App
