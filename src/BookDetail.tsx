@@ -1,23 +1,21 @@
-import {useEffect, useState} from "react";
-import type {Book} from "./types/book";
 import {useParams} from "react-router";
+import {useBooks} from "./hooks/useBooks.ts";
+import {useEffect} from "react";
 import toast from "react-hot-toast";
 
 export default function BookDetail() {
 
-    const [book, setBook] = useState<Book>()
-
     const params = useParams();
+    const {getBookById} = useBooks();
+    const book = getBookById(Number(params.bookId));
 
     useEffect(() => {
-       fetch('https://fakerestapi.azurewebsites.net/api/v1/Books/' + params.bookId)
-           .then(res => {
-               res.json().then(book =>{
-                   setBook(book);
-                   toast.success("Book details successfully loaded!");
-               })
-           })
-    }, [])
+        if (book) {
+            toast.success("Book details loaded!");
+        } else {
+            toast.error("Book details could not be loaded!");
+        }
+    }, [book]);
 
     return (
         <>

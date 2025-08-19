@@ -1,11 +1,10 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import toast from "react-hot-toast";
-import type {Book} from "./types/book";
 import {useNavigate} from "react-router";
+import {useBooks} from "./hooks/useBooks.ts";
 
 function BooksList() {
-    const [books, setBooks] = useState<Book[]>([])
-
+    const {books, setBooks} = useBooks();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,9 +13,10 @@ function BooksList() {
                 res.json().then(books => {
                     setBooks(books)
                     toast.success("Books found!")
-                });
+                })
+                .catch(() => toast.error("Something went wrong"));
             })
-    }, [])
+    }, [setBooks])
 
     return (
         <>
